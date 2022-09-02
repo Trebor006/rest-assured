@@ -40,6 +40,7 @@ public class TypeCodeRest extends BaseTest{
         Response response = RequestHelper.post(TestUrls.POST_POST_URL, data);
 
         response.then().log().body();
+        response.then().assertThat().statusCode(201);
         response.then().assertThat().body("size()", Matchers.equalTo(4));
         response.then().assertThat().body("userId", Matchers.equalTo(post.getUserId()));
         response.then().assertThat().body("id", Matchers.greaterThan(0));
@@ -59,6 +60,7 @@ public class TypeCodeRest extends BaseTest{
         Response response = RequestHelper.put(TestUrls.PUT_POST_URL, String.valueOf(id), data);
 
         response.then().log().body();
+        response.then().assertThat().statusCode(200);
         response.then().assertThat().body("size()", Matchers.equalTo(4));
         response.then().assertThat().body("userId", Matchers.equalTo(post.getUserId()));
         response.then().assertThat().body("id", Matchers.equalTo(id));
@@ -72,14 +74,8 @@ public class TypeCodeRest extends BaseTest{
         //    DELETE /posts/1
         Integer id = 2;
         Response response = RequestHelper.delete(TestUrls.DELETE_POST_URL, String.valueOf(id));
-
-        Response responseDeleted = RequestHelper.getById(TestUrls.GET_POST_BY_ID_URL, String.valueOf(id));
-
-        responseDeleted.then().log().body();
-        responseDeleted.then().assertThat().body("size()", Matchers.equalTo(4));
-        responseDeleted.then().assertThat().body("userId", Matchers.greaterThan(0));
-        responseDeleted.then().assertThat().body("id", Matchers.equalTo(id));
-        responseDeleted.then().assertThat().body("title", Matchers.not(""));
-        responseDeleted.then().assertThat().body("body", Matchers.not(""));
+        response.then().log().body();
+        response.then().assertThat().statusCode(200);
+        response.then().assertThat().body("size()", Matchers.equalTo(0));
     }
 }
